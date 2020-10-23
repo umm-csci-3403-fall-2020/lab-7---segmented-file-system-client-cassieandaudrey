@@ -15,7 +15,7 @@ public class FileRetriever  {
         String server;
         int port;
         Map<Byte, byte[]> headers;
-        Map<Integer, byte[]> data;
+        Map<Integer, byte[]> datalist;
         DatagramSocket socket;
 
         // Constructor
@@ -25,7 +25,9 @@ public class FileRetriever  {
                 DatagramSocket socket = new DatagramSocket(port);
                 this.socket = socket;
                 Map<Byte, byte[]> headers = new HashMap<Byte, byte[]>();
-                Map<Integer, byte[]> data = new HashMap<Integer, byte[]>();
+                Map<Integer, byte[]> datalist = new HashMap<Integer, byte[]>();
+                this.datalist = datalist;
+                this.headers = headers;
         }
 
         // method to start conversation with server
@@ -41,9 +43,10 @@ public class FileRetriever  {
               
                 int MAX = 1000;
                 int count =0;
-                byte[] buf = new byte[1028]; 
+                byte[] buf = new byte[0];
 
                 while(count < MAX){
+                        buf = new byte[1028];
                         DatagramPacket dp = new DatagramPacket(buf, buf.length);
                         socket.receive(dp);
                         PacketManager packer = new PacketManager(dp);
@@ -54,8 +57,10 @@ public class FileRetriever  {
                         }
                         // otherwise it is data
                         else{
-                           data.put(packer.pnum, packer.data);
+                           datalist.put(packer.pnum, packer.data);
+                           System.out.println(packer.pnum);
                            if( packer.isLast == true){
+                                   
                                 MAX = packer.pnum;
                            }
 
@@ -65,8 +70,10 @@ public class FileRetriever  {
         }
         // method to retrive packets 
 	public void downloadFiles() throws IOException {
-                start(this.port, this.server, this.socket);
+                start(this.port, this.server, socket);
                 getPackets(this.server, this.port, socket);
+                socket.close();
+                System.out.println(datalist.get(115));
 
 
 

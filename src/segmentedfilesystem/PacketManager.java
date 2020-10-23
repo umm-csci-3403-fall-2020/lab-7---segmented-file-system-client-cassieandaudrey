@@ -6,7 +6,7 @@ import java.net.InetAddress;
 import java.util.Arrays;
 
 public class PacketManager {
-    String status;
+    String status = "none";
     DatagramPacket dp;
     boolean isLast = false;
     byte[] bytes;
@@ -18,7 +18,7 @@ public class PacketManager {
     // Constructor
     public PacketManager(DatagramPacket dp){
         this.dp = dp; 
-        this.statusID = this.bytes[0];
+        this.statusID = dp.getData()[0];
         this.bytes = dp.getData();
         this.offset = (status.equals("header") ? 4 : 3);
         this.data = Arrays.copyOfRange(this.bytes, offset, this.bytes.length);
@@ -33,7 +33,7 @@ public class PacketManager {
             this.status = "header";
         }
         else{
-            this.status = "data";
+            this.status = "data"; 
             // is packet final packet?
             if(statusID%4 == 3){
                 this.isLast = true;
