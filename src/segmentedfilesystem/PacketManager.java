@@ -9,23 +9,25 @@ public class PacketManager {
     String status;
     DatagramPacket dp;
     boolean isLast = false;
-    byte[] bytes = this.dp.getData();
-    byte statusID = bytes[0];
-    int offset = (status.equals("header") ? 4 : 3); 
-    byte[] data = Arrays.copyOfRange(bytes, offset, bytes.length);
+    byte[] bytes;
+    byte statusID;
+    int offset; 
+    byte[] data;
     int pnum;
     
     // Constructor
     public PacketManager(DatagramPacket dp){
+        this.dp = dp; 
+        this.statusID = this.bytes[0];
+        this.bytes = dp.getData();
+        this.offset = (status.equals("header") ? 4 : 3);
+        this.data = Arrays.copyOfRange(this.bytes, offset, this.bytes.length);
         setStatus();
         setFileID(this.bytes);
     }
   
     // Getters
     public void setStatus(){
-        byte[] bytes = this.dp.getData();
-        byte statusID = bytes[0];
-        this.statusID = statusID;
         // if even, packet is header
         if(statusID%2 == 0){
             this.status = "header";

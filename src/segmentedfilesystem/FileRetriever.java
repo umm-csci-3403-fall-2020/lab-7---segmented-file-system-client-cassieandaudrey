@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,19 +16,23 @@ public class FileRetriever  {
         int port;
         Map<Byte, byte[]> headers;
         Map<Integer, byte[]> data;
-        //Constructor 
-	public FileRetriever(String server, int port) throws UnknownHostException {
-                this.server=server;
-                this.port=port;
-                Map<Byte, byte[]> headers = new HashMap<Byte, byte[]>();
-                Map<Integer, byte[]> data  = new HashMap<Integer, byte[]>();                
-        }
-        
-        //method to start conversation with server
-        public static void start(int port, String server ) throws IOException{
-                InetAddress inetAddress = InetAddress.getByName(server);
+        DatagramSocket socket;
+
+        // Constructor
+        public FileRetriever(String server, int port) throws UnknownHostException, SocketException {
+                this.server = server;
+                this.port = port;
                 DatagramSocket socket = new DatagramSocket(port);
-                byte[] buf = new byte[0]; 
+                this.socket = socket;
+                Map<Byte, byte[]> headers = new HashMap<Byte, byte[]>();
+                Map<Integer, byte[]> data = new HashMap<Integer, byte[]>();
+        }
+
+        // method to start conversation with server
+        public static void start(int port, String server, DatagramSocket socket) throws IOException {
+                InetAddress inetAddress = InetAddress.getByName(server);
+                // DatagramSocket socket = new DatagramSocket(port);
+                byte[] buf = new byte[0];
                 DatagramPacket dp = new DatagramPacket(buf, buf.length, inetAddress, port);
                 socket.send(dp);
                 
@@ -60,7 +65,8 @@ public class FileRetriever  {
         }
         // method to retrive packets 
 	public void downloadFiles() throws IOException {
-                start(this.port, this.server);
+                start(this.port, this.server, this.socket);
+                getPackets(this.server, this.port, socket);
 
 
 
