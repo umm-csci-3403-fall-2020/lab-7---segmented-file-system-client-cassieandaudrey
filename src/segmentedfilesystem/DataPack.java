@@ -15,6 +15,8 @@ public class DataPack {
     byte[] data;
     int pnum;
     byte fileID;
+    byte[] info;
+
     
     //Constructor
     public DataPack(DatagramPacket dp){
@@ -23,6 +25,9 @@ public class DataPack {
         this.fileID = data[1];
         this.statusID = data[0];
         this.isLast = (statusID%4 == 3);
+        int length = dp.getLength();
+        this.info = Arrays.copyOfRange(dp.getData(), 4, length);
+
     }
     public void setPnum(){
         int x = data[2];

@@ -73,10 +73,16 @@ public class FileRetriever  {
                 start(this.port, this.server, socket);
                 getPackets(this.server, this.port, socket);
                 socket.close();
-                System.out.println(new String(headers.get(0).getFilename()));
+                for(int i=0; i<headers.size(); i++){
+                  System.out.println(new String(headers.get(0).getFilename()));
+                }
+                
                 PacketManager manager = new PacketManager(datalist);
                 List<DataPack> sorted = manager.sortPacks(datalist);
-                System.out.println(sorted);
+                for(int i=0; i<sorted.size(); i++){
+                  System.out.println(new String(sorted.get(0).info));
+                }
+                
                 
 
 
