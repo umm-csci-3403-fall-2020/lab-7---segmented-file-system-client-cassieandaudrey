@@ -1,19 +1,26 @@
 package segmentedfilesystem;
-import java.io.IOException; 
-import java.net.DatagramPacket; 
-import java.net.DatagramSocket; 
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class FileRetriever  {
         String server;
         int port;
+        Map<Byte, byte[]> headers;
+        Map<Integer, byte[]> data;
         //Constructor 
 	public FileRetriever(String server, int port) throws UnknownHostException {
                 this.server=server;
-                this.port=port;                
+                this.port=port;
+                Map<Byte, byte[]> headers = new HashMap<Byte, byte[]>();
+                Map<Integer, byte[]> data  = new HashMap<Integer, byte[]>();                
         }
         
         //method to start conversation with server
@@ -24,6 +31,32 @@ public class FileRetriever  {
                 DatagramPacket dp = new DatagramPacket(buf, buf.length, inetAddress, port);
                 socket.send(dp);
                 
+        }
+        public void getPackets(String server, int port, DatagramSocket socket) throws IOException{
+              
+                int MAX = 1000;
+                int count =0;
+                byte[] buf = new byte[1028]; 
+
+                while(count < MAX){
+                        DatagramPacket dp = new DatagramPacket(buf, buf.length);
+                        socket.receive(dp);
+                        PacketManager packer = new PacketManager(dp);
+                        count++;
+                        // if packet is a header
+                        if(packer.status == "header" ){
+                          headers.put(packer.statusID, packer.data);
+                        }
+                        // otherwise it is data
+                        else{
+                           data.put(packer.pnum, packer.data);
+                           if( packer.isLast == true){
+                                MAX = packer.pnum;
+                           }
+
+                        }
+                        
+                }
         }
         // method to retrive packets 
 	public void downloadFiles() throws IOException {
