@@ -14,7 +14,7 @@ public class HeaderPack {
     String status = "header";
     DatagramPacket dp;
     byte[] filename;
-    
+
     public HeaderPack(DatagramPacket dp){
         int filenameLength = dp.getLength();
         filename = Arrays.copyOfRange(dp.getData(), 2, filenameLength);

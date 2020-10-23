@@ -1,72 +1,32 @@
 package segmentedfilesystem;
-import java.io.IOException; 
-import java.net.DatagramPacket; 
-import java.net.DatagramSocket; 
-import java.net.InetAddress; 
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PacketManager {
-    String status = "none";
-    DatagramPacket dp;
-    boolean isLast = false;
-    byte[] bytes;
-    byte statusID;
-    int offset; 
-    byte[] data;
-    int pnum;
+  
     
     // Constructor
-    public PacketManager(DatagramPacket dp){
-        this.dp = dp; 
-        this.statusID = dp.getData()[0];
-        this.bytes = dp.getData();
-        this.offset = (status.equals("header") ? 4 : 3);
-        this.data = Arrays.copyOfRange(this.bytes, offset, this.bytes.length);
-        setStatus();
-        setFileID(this.bytes);
-    }
-  
-    // Getters
-    public void setStatus(){
-        // if even, packet is header
-        if(statusID%2 == 0){
-            this.status = "header";
-        }
-        else{
-            this.status = "data"; 
-            // is packet final packet?
-            if(statusID%4 == 3){
-                this.isLast = true;
-            }
-        }
-
+    public PacketManager(Map<Integer,DataPack> datalist){
         
+   
     }
-    public void setFileID(byte[] bytes){
-        int x = bytes[2];
-        int y = bytes[3];
-        if (x < 0) {
-            x += 256;
-        }
-        if (y < 0) {
-            y += 256;
-        }
-        
-        this.pnum = (256*x+y);
-    }
- 
-    // method to decided weither a dp is a header or data packet
-    public void classify(DatagramPacket dp){
-
-        
-    }
-    public void constructHeader(DatagramPacket header){
-
-    }
-    public void constructData(DatagramPacket dp){
-
-    }
-    public void sortPackets(){
-
+    public List<DataPack> sortPacks(Map<Integer,DataPack> datalist){ 
+        // TreeMap to store values of HashMap 
+        List<Integer> sortedKeys=new ArrayList<Integer>(datalist.keySet());
+        Collections.sort(sortedKeys);
+        List<DataPack> sortedData = new ArrayList<DataPack>(); 
+        for (Integer key : sortedKeys){
+            sortedData.add(datalist.get(key));
+        }       
+        return sortedData;
     }
 }

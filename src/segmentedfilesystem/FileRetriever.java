@@ -6,16 +6,18 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class FileRetriever  {
         String server;
         int port;
-        Map<Byte, byte[]> headers;
-        Map<Integer, byte[]> datalist;
+        ArrayList<HeaderPack> headers;
+        Map<Integer,DataPack> datalist;
         DatagramSocket socket;
 
         // Constructor
@@ -24,8 +26,8 @@ public class FileRetriever  {
                 this.port = port;
                 DatagramSocket socket = new DatagramSocket(port);
                 this.socket = socket;
-                Map<Byte, byte[]> headers = new HashMap<Byte, byte[]>();
-                Map<Integer, byte[]> datalist = new HashMap<Integer, byte[]>();
+                ArrayList<HeaderPack> headers = new ArrayList<HeaderPack>();
+                Map<Integer,DataPack> datalist = new HashMap<Integer,DataPack>();
                 this.datalist = datalist;
                 this.headers = headers;
         }
@@ -40,7 +42,6 @@ public class FileRetriever  {
                 
         }
         public void getPackets(String server, int port, DatagramSocket socket) throws IOException{
-              
                 int MAX = 1000;
                 int count =0;
                 byte[] buf = new byte[0];
@@ -49,19 +50,18 @@ public class FileRetriever  {
                         buf = new byte[1028];
                         DatagramPacket dp = new DatagramPacket(buf, buf.length);
                         socket.receive(dp);
-                        PacketManager packer = new PacketManager(dp);
                         count++;
                         // if packet is a header
-                        if(packer.status == "header" ){
-                          headers.put(packer.statusID, packer.data);
+                        if(dp.getData()[0]%2 ==0){
+                          HeaderPack head = new HeaderPack(dp);
+                          headers.add(head);
                         }
                         // otherwise it is data
                         else{
-                           datalist.put(packer.pnum, packer.data);
-                           System.out.println(packer.pnum);
-                           if( packer.isLast == true){
-                                   
-                                MAX = packer.pnum;
+                           DataPack data = new DataPack(dp);
+                           datalist.put(data.pnum, data);
+                           if(data.isLast == true){
+                             MAX = data.pnum;
                            }
 
                         }
@@ -69,11 +69,16 @@ public class FileRetriever  {
                 }
         }
         // method to retrive packets 
-	public void downloadFiles() throws IOException {
+	public void downloadFiles() throws IOException, IndexOutOfBoundsException {
                 start(this.port, this.server, socket);
                 getPackets(this.server, this.port, socket);
                 socket.close();
-                System.out.println(datalist.get(115));
+                System.out.println(new String(headers.get(0).getFilename()));
+                PacketManager manager = new PacketManager(datalist);
+                List<DataPack> sorted = manager.sortPacks(datalist);
+                System.out.println(sorted);
+                
+
 
 
 
