@@ -39,6 +39,7 @@ public class FileRetriever  {
                 byte[] buf = new byte[0];
                 DatagramPacket dp = new DatagramPacket(buf, buf.length, inetAddress, port);
                 socket.send(dp);
+                System.out.println("convo Started");
                 
                 
         }
@@ -51,9 +52,14 @@ public class FileRetriever  {
                         buf = new byte[1028];
                         DatagramPacket dp = new DatagramPacket(buf, buf.length);
                         socket.receive(dp);
+                        System.out.println("dp recieved");
                         count++;
                         // if packet is a header
-                        if(dp.getData()[0]%2 ==0){
+                        if(dp.getLength()<0){
+                                System.out.println("dp too short");
+                        }
+                        else if(dp.getData()[0]%2 ==0){
+                                System.out.println("headerPack added");
                           HeaderPack head = new HeaderPack(dp);
                           headers.add(head);
                         }
@@ -78,7 +84,7 @@ public class FileRetriever  {
                 }
                 Packet packer = new  Packet(datalist,headers);
                 packer.assembleFile(datalist, headers);
-                socket.close();
+                
                 
 
 
