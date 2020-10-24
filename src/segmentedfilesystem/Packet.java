@@ -14,25 +14,29 @@ public class Packet {
         
     }
     public void assembleFile(List<DataPack> dataPacks, List<HeaderPack> headerPacks) throws IOException {
-          // Go through Headers and use them to ID files
-          for(int i=0; i<headerPacks.size(); i++){
-            byte ID = headerPacks.get(i).getFileID();
-            String filename = new String(headerPacks.get(i).getFilename());
-
-            // Make Packet Manager to sort dataPacks for the specified file
-            Map<Integer,DataPack> datalist = new HashMap<Integer,DataPack>();
-            for(int j = 0; j<dataPacks.size(); j++){
-                DataPack dpack = dataPacks.get(i);
+        // Go through Headers and use them to ID files
+        for(int i=0; i<headerPacks.size(); i++){
+            byte ID = dataPacks.get(i).getFileID();
+            Map<Integer,DataPack> dpacklist = new HashMap<Integer,DataPack>();
+            for(int j=0; j<dataPacks.size(); j++){
+                DataPack dpack = dataPacks.get(j);
                 if(dpack.getFileID() == ID){
-                    datalist.put(dpack.pnum, (dpack));
+                    dpacklist.put(dpack.pnum, dpack);
                 }
             }
-            PacketManager manager = new PacketManager(datalist);
-            List<DataPack> sorted = manager.sortPacks(datalist);
+            PacketManager manager = new PacketManager(dpacklist);
+            System.out.println(dpacklist.size() + "dpackslist size BEFORE SOREt");
+            List<DataPack> sorted = manager.sortPacks(dpacklist);
+            String filename = "default";
+            for(int j=0; j<headerPacks.size(); j++){
+                if(headerPacks.get(j).fileID == ID){
+                    filename = new String(headerPacks.get(j).getFilename());
+                }
+            }
             writeToFile(sorted, filename);
-            System.out.println(filename);
-            System.out.println(sorted);
         }
+        
+    
     }
        public void writeToFile(List<DataPack> sorted, String filename) throws IOException {
         File file = new File(filename); 
@@ -40,9 +44,10 @@ public class Packet {
         System.out.println("THE SIZE OF THE SORTED IS: " + sorted.size());                
         for(int i = 0; i < sorted.size(); i++) {
             System.out.println("writing");
-            out.write(sorted.get(i).info);
+            out.write(sorted.get(i).info);            
         }
-            out.flush();
-            out.close();
+        out.flush();
+        out.close();
+            
         }
 }

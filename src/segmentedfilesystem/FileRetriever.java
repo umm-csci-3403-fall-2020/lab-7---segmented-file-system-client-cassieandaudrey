@@ -65,6 +65,7 @@ public class FileRetriever  {
                         }
                         // otherwise it is data
                         else{
+                                System.out.println("dataPack added");
                            DataPack data = new DataPack(dp);
                            datalist.add(data);
                            if(data.isLast == true){
@@ -82,6 +83,7 @@ public class FileRetriever  {
                 for(int i=0; i<headers.size(); i++){
                   System.out.println(new String(headers.get(0).getFilename()));
                 }
+                System.out.println(datalist.size() + "Data list SIZE PRE SORT");
                 Packet packer = new  Packet(datalist,headers);
                 packer.assembleFile(datalist, headers);
                 

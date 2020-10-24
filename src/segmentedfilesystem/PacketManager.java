@@ -30,6 +30,7 @@ public class PacketManager {
         for (Integer key : sortedKeys){
             sortedData.add(datalist.get(key));
         }       
+        System.out.println(sortedData.size()+ "SORTED DATA SIZE 33");
         return sortedData;
     }
  
