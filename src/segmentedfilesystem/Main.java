@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) throws IOException{
         String server = "localhost";
        
-        int port = 6013;
+        int port = 8080;
         
         if (args.length >= 1) {
             server = args[0];
