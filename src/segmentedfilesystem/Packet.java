@@ -17,7 +17,6 @@ public class Packet {
           // Go through Headers and use them to ID files
           for(int i=0; i<headerPacks.size(); i++){
             byte ID = headerPacks.get(i).getFileID();
-            ArrayList<String> file = new ArrayList<String>();
             String filename = new String(headerPacks.get(i).getFilename());
 
             // Make Packet Manager to sort dataPacks for the specified file
@@ -36,19 +35,14 @@ public class Packet {
         }
     }
        public void writeToFile(List<DataPack> sorted, String filename) throws IOException {
-            File file = new File(filename);
-            for(int i = 0; i<sorted.size(); i++){
-                FileOutputStream os = new FileOutputStream(file);
-                BufferedOutputStream out = new BufferedOutputStream(os);
-                for(int j = 0; j < sorted.size(); j++) {
-                    System.out.println("writing");
-                    out.write(sorted.get(i).info);
-                }
-                out.flush();
-                out.close();
-            }
-
-
+        File file = new File(filename); 
+        BufferedOutputStream out= new BufferedOutputStream(new FileOutputStream(file));
+        System.out.println("THE SIZE OF THE SORTED IS: " + sorted.size());                
+        for(int i = 0; i < sorted.size(); i++) {
+            System.out.println("writing");
+            out.write(sorted.get(i).info);
         }
-    
+            out.flush();
+            out.close();
+        }
 }
