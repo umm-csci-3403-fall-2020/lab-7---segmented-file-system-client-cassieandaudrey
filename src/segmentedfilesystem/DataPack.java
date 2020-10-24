@@ -41,5 +41,8 @@ public class DataPack {
         
         this.pnum = (256*x+y);
     }
+    public byte getFileID(){
+        return fileID;
+    }
     
 }

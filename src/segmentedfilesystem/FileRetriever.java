@@ -17,7 +17,7 @@ public class FileRetriever  {
         String server;
         int port;
         ArrayList<HeaderPack> headers;
-        Map<Integer,DataPack> datalist;
+        List<DataPack> datalist;
         DatagramSocket socket;
 
         // Constructor
@@ -27,7 +27,7 @@ public class FileRetriever  {
                 DatagramSocket socket = new DatagramSocket(port);
                 this.socket = socket;
                 ArrayList<HeaderPack> headers = new ArrayList<HeaderPack>();
-                Map<Integer,DataPack> datalist = new HashMap<Integer,DataPack>();
+                List<DataPack>datalist = new ArrayList<DataPack>();
                 this.datalist = datalist;
                 this.headers = headers;
         }
@@ -39,6 +39,7 @@ public class FileRetriever  {
                 byte[] buf = new byte[0];
                 DatagramPacket dp = new DatagramPacket(buf, buf.length, inetAddress, port);
                 socket.send(dp);
+                
                 
         }
         public void getPackets(String server, int port, DatagramSocket socket) throws IOException{
@@ -59,7 +60,7 @@ public class FileRetriever  {
                         // otherwise it is data
                         else{
                            DataPack data = new DataPack(dp);
-                           datalist.put(data.pnum, data);
+                           datalist.add(data);
                            if(data.isLast == true){
                              MAX = data.pnum;
                            }
@@ -67,21 +68,20 @@ public class FileRetriever  {
                         }
                         
                 }
-        }
+        } 
         // method to retrive packets 
 	public void downloadFiles() throws IOException, IndexOutOfBoundsException {
                 start(this.port, this.server, socket);
                 getPackets(this.server, this.port, socket);
-                socket.close();
                 for(int i=0; i<headers.size(); i++){
                   System.out.println(new String(headers.get(0).getFilename()));
                 }
+                Packet packer = new  Packet(datalist,headers);
+                packer.assembleFile(datalist, headers);
+                socket.close();
                 
-                PacketManager manager = new PacketManager(datalist);
-                List<DataPack> sorted = manager.sortPacks(datalist);
-                for(int i=0; i<sorted.size(); i++){
-                  System.out.println(new String(sorted.get(0).info));
-                }
+
+
                 
                 
 
