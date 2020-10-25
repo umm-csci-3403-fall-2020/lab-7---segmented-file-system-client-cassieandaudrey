@@ -7,10 +7,8 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 
 public class FileRetriever  {
@@ -33,18 +31,15 @@ public class FileRetriever  {
                 // DatagramSocket socket = new DatagramSocket(port);
                 byte[] buf = new byte[0];
                 DatagramPacket dp = new DatagramPacket(buf, buf.length, inetAddress, port);
-                socket.send(dp);
-                System.out.println("convo Started");
-                
-                
+                socket.send(dp);      
         }
         public void getPackets(String server, int port, DatagramSocket socket) throws IOException{
-                int numPacks = 100000;
                 byte[] buf = new byte[0];
                 int numFiles =3; //Three here becasue this is number in writeup 
                 
                 while(numFiles>0){
                         int count =0;
+                        int numPacks = 100000;
                         List<DataPack>datalist = new ArrayList<DataPack>();
                         ArrayList<HeaderPack> headers = new ArrayList<HeaderPack>();
                         while(count < numPacks+1){ // Count +1 here because header pack must be accounted for
@@ -52,7 +47,6 @@ public class FileRetriever  {
                                 DatagramPacket dp = new DatagramPacket(buf, buf.length);
                                 socket.receive(dp);
                                 if(dp.getData()[0]%2 ==0) {
-                                    System.out.println("headerPack added");
                                     HeaderPack head = new HeaderPack(dp);
                                     headers.add(head);
                                     count++;
@@ -62,13 +56,12 @@ public class FileRetriever  {
                                     DataPack data = new DataPack(dp);
                                     datalist.add(data);
                                     count++;
-                                    if((data.statusID%4 == 3)){
+                                    if((data.statusID%4) == 3){
                                         numPacks = data.pnum;
                                     }
         
                                 }
-                                System.out.println(count);
-                                
+                                                                
                         }
                         Packet packer = new  Packet(datalist,headers);
                         packer.assembleFile(datalist, headers);

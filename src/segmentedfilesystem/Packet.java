@@ -26,7 +26,6 @@ public class Packet {
                 }
             }
             PacketManager manager = new PacketManager(dpacklist);
-            System.out.println(dpacklist.size() + "dpackslist size BEFORE SOREt");
             List<DataPack> sorted = manager.sortPacks(dpacklist);
             writeToFile(sorted, filename);
         }

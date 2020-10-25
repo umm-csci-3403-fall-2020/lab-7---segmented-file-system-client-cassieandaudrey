@@ -13,7 +13,6 @@ public class Main {
 
         int port = 6014;
 
-        
         if (args.length >= 1) {
             server = args[0];
         }
