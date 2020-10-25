@@ -16,7 +16,8 @@ public class Packet {
     public void assembleFile(List<DataPack> dataPacks, List<HeaderPack> headerPacks) throws IOException {
         // Go through Headers and use them to ID files
         for(int i=0; i<headerPacks.size(); i++){
-            byte ID = dataPacks.get(i).getFileID();
+            String filename = new String(headerPacks.get(i).getFilename());
+            byte ID = headerPacks.get(i).getFileID();
             Map<Integer,DataPack> dpacklist = new HashMap<Integer,DataPack>();
             for(int j=0; j<dataPacks.size(); j++){
                 DataPack dpack = dataPacks.get(j);
@@ -27,12 +28,6 @@ public class Packet {
             PacketManager manager = new PacketManager(dpacklist);
             System.out.println(dpacklist.size() + "dpackslist size BEFORE SOREt");
             List<DataPack> sorted = manager.sortPacks(dpacklist);
-            String filename = "default";
-            for(int j=0; j<headerPacks.size(); j++){
-                if(headerPacks.get(j).fileID == ID){
-                    filename = new String(headerPacks.get(j).getFilename());
-                }
-            }
             writeToFile(sorted, filename);
         }
         

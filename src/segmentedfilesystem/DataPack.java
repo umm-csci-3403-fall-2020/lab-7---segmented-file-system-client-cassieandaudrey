@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 public class DataPack {
     String status = "data";
-    boolean isLast = false;
     byte statusID; 
     byte[] data;
     int pnum;
@@ -24,7 +23,6 @@ public class DataPack {
         this.setPnum();
         this.fileID = data[1];
         this.statusID = data[0];
-        this.isLast = (statusID%4 == 3);
         int length = dp.getLength();
         this.info = Arrays.copyOfRange(dp.getData(), 4, length);
 
