@@ -15,23 +15,33 @@ import java.util.List;
 import java.util.Map;
 
 public class PacketManager {
-  
-    
-    // Constructor
-    public PacketManager(Map<Integer, DataPack> datalist){
-        
-   
+    boolean full;
+    List<DataPack> datalist;
+    int MaxSize;
+    byte fileID;
+
+    // Constructors
+    public PacketManager(byte fileID) {
+        this.datalist = new ArrayList<DataPack>();
+        this.full = false;
+        this.MaxSize = 100000;
+        this.fileID = fileID;
+
     }
-    public List<DataPack> sortPacks(Map<Integer, DataPack> datalist){ 
-        // TreeMap to store values of HashMap 
-        List<Integer> sortedKeys=new ArrayList<Integer>(datalist.keySet());
-        Collections.sort(sortedKeys);
-        List<DataPack> sortedData = new ArrayList<DataPack>(); 
-        for (Integer key : sortedKeys){
-            sortedData.add(datalist.get(key));
-        }       
-        System.out.println(sortedData.size()+ "SORTED DATA SIZE 33");
-        return sortedData;
+
+    public void addToList(DataPack dpack) {
+        datalist.add(dpack);
+        if (datalist.size() == this.MaxSize) {
+            this.full = true;
+        }
+
     }
- 
+
+    public void setfileID(byte fileID) {
+        this.fileID = fileID;
+    }
+    public void setMaxSize(int MaxSize){
+        this.MaxSize = MaxSize;
+    }
+
 }

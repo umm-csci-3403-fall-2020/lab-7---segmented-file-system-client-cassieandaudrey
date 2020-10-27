@@ -1,9 +1,7 @@
 package segmentedfilesystem;
 
-
 import java.net.DatagramPacket;
 import java.util.Arrays;
-
 
 public class HeaderPack {
     String status = "header";
@@ -11,7 +9,7 @@ public class HeaderPack {
     byte[] filename;
     byte fileID;
 
-    public HeaderPack(DatagramPacket dp){
+    public HeaderPack(DatagramPacket dp) {
         this.dp = dp;
         fileID = dp.getData()[1];
         int filenameLength = dp.getLength();
@@ -21,9 +19,10 @@ public class HeaderPack {
     public byte[] getFilename() {
         return filename;
     }
-    public byte getFileID(){
+
+    public byte getFileID() {
         return fileID;
 
     }
-    
+
 }
