@@ -37,7 +37,6 @@ public class Packet {
         BufferedOutputStream out= new BufferedOutputStream(new FileOutputStream(file));
         System.out.println("THE SIZE OF THE SORTED IS: " + sorted.size());                
         for(int i = 0; i < sorted.size(); i++) {
-            System.out.println("writing");
             out.write(sorted.get(i).info);            
         }
         out.flush();
