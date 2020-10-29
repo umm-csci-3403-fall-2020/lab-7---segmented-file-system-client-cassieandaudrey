@@ -48,8 +48,6 @@ public class FileRetriever {
                                 if (dp.getData()[0] % 2 == 0) {
                                         HeaderPack head = new HeaderPack(dp);
                                         headers.add(head);
-                                        
-
                                 }
                                 // otherwise it is dataPack
                                 else {
@@ -66,28 +64,26 @@ public class FileRetriever {
                                                         }
                                                 }
                                         }
-
+                                        // if data was not added, it belongs to new file
                                         if (data.added == false) {
                                                 for (int i = 0; i < packyList.size(); i++) {
+                                                        // if fileID is dummy number, it is free to be assigned new ID
                                                         if (packyList.get(i).fileID == 69) {
-                                                                //System.out.println(packyList.get(i).fileID + "BEFORE SET");
                                                                 packyList.get(i).setfileID(data.fileID);
-                                                                //System.out.println(packyList.get(i).fileID + "AFTER SET");
                                                                 packyList.get(i).addToList(data);
-                                                                System.out.println(data.pnum);
                                                                 data.added = true;
                                                                 if ((data.statusID % 4) == 3) {
+                                                                        // found last packet, update file max
                                                                         packyList.get(i).setMaxSize(data.pnum);
                                                                 }
                                                                 if (packyList.get(i).full == true) {
+                                                                        // Recieved all packets for given file
                                                                         numFiles--;
                                                                 }
                                                                 break;
 
                                                         }
-                                                        else{
-                                                                System.out.println("help");
-                                                        }
+                                                      
                                                 }
                                         }
                                         
@@ -95,22 +91,8 @@ public class FileRetriever {
                                 }
 
                 }
-                for (int i = 0; i < headers.size(); i++) {
-                        HeaderPack header = headers.get(i);
-                        byte ID = header.fileID;
-                        PacketManager chosenOne = new PacketManager((byte ) 1); 
-                        for(int j =0; j<packyList.size(); j++){
-                                if(ID == packyList.get(j).fileID){
-                                        chosenOne = packyList.get(j);
-                                }
-                        }
-                        System.out.println(chosenOne.datalist.size());
-                        Packet packer = new Packet(chosenOne.datalist, header);
-                        packer.assembleFile(chosenOne.datalist, header);
-                        System.out.println("FILE COMPLETED");
-
-                }
-
+                Packet packer = new Packet();
+                packer.packagePackets(headers, packyList);
         }
 
         // method to retrive packets
