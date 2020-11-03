@@ -49,6 +49,7 @@ public class FileRetriever {
                                 if (dp.getData()[0] % 2 == 0) {
                                         HeaderPack head = new HeaderPack(dp);
                                         headers.add(head);
+                                        System.out.println("header added");
                                 }
                                 // otherwise it is dataPack
                                 else {

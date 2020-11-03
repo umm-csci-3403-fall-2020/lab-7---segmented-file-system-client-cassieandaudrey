@@ -25,21 +25,15 @@ public class DataPack {
     }
 
     public void setPnum() {
-        // int x = data[2];
-        // int y = data[3];
-        // if (x < 0) {
-        //     x += 256;
-        // }
-        // if (y < 0) {
-        //     y += 256;
-        // }
-        // int x = Byte.toUnsignedInt(data[2]);
-        // int y = Byte.toUnsignedInt(data[3]);
-        // this.pnum = (256 * x + y);
-        byte[] pNumberData = new byte[]{data[2], data[3]};
-        this.pnum =  ByteBuffer.wrap(pNumberData).getShort();
-        
-
+        int x = data[2];
+        int y = data[3];
+        if (x < 0) {
+            x += 256;
+        }
+        if (y < 0) {
+            y += 256;
+        }
+        this.pnum = (256 * x + y);
     }
 
     public byte getFileID() {
