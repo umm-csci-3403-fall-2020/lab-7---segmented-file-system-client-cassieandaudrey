@@ -13,20 +13,17 @@ public class PacketManager {
     public PacketManager(byte fileID) {
         this.datalist = new ArrayList<DataPack>();
         this.full = false;
-        this.MaxSize = 600;
+        this.MaxSize = Integer.MAX_VALUE;
         this.fileID = fileID;
 
     }
 
     public void addToList(DataPack dpack) {
         datalist.add(dpack);
-        if (datalist.size() >= this.MaxSize) {
+        System.out.println(datalist.size() + " " + this.MaxSize + " " +this.fileID );
+        if (datalist.size() > this.MaxSize|| (dpack.statusID%4 == 3 && dpack.pnum ==0)) {
             this.full = true;
         }
-        else{
-            this.full = false;
-        }
-
     }
 
     public void setfileID(byte fileID) {

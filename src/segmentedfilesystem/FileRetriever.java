@@ -59,10 +59,12 @@ public class FileRetriever {
                                                         packyList.get(i).addToList(data);
                                                         data.added = true;
                                                         if ((data.statusID % 4) == 3) {
+                                                                System.out.println("FINAL PACKET FOUND");
                                                                 packyList.get(i).setMaxSize(data.pnum);
                                                         }
                                                         if (packyList.get(i).full == true) {
                                                                 numFiles--;
+                                                                System.out.println("NUMBER OF FILES reDUCED");
                                                         }
                                                         
                                                 }
@@ -77,6 +79,8 @@ public class FileRetriever {
                                                                 data.added = true;
                                                                 if ((data.statusID % 4) == 3) {
                                                                         // found last packet, update file max
+                                                                        System.out.println("FINAL PACKET FOUND");
+                                                                        System.out.println("setting max size to "+ data.pnum);
                                                                         packyList.get(i).setMaxSize(data.pnum);                                                                        
                                                                 }
                                                                 if (packyList.get(i).full == true) {
