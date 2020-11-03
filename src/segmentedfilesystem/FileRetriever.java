@@ -34,9 +34,10 @@ public class FileRetriever {
         public void getPackets(String server, int port, DatagramSocket socket) throws IOException {
                 byte[] buf = new byte[0];
                 int numFiles = 3; // Three here becasue this is number in writeup
+                // Give 'dummy' values to packet list IDs to signify they are open for use
                 List<PacketManager> packyList = new ArrayList<PacketManager>();
                 for (int i = 0; i < numFiles; i++) {
-                        PacketManager packy = new PacketManager((byte) 69);
+                        PacketManager packy = new PacketManager((byte) 99);
                         packyList.add(packy);
                 }
                 ArrayList<HeaderPack> headers = new ArrayList<HeaderPack>();
@@ -44,7 +45,7 @@ public class FileRetriever {
                                 buf = new byte[1028];
                                 DatagramPacket dp = new DatagramPacket(buf, buf.length);
                                 socket.receive(dp);
-
+                                // Check if pack is header
                                 if (dp.getData()[0] % 2 == 0) {
                                         HeaderPack head = new HeaderPack(dp);
                                         headers.add(head);
@@ -62,19 +63,20 @@ public class FileRetriever {
                                                         if (packyList.get(i).full == true) {
                                                                 numFiles--;
                                                         }
+                                                        
                                                 }
                                         }
                                         // if data was not added, it belongs to new file
                                         if (data.added == false) {
                                                 for (int i = 0; i < packyList.size(); i++) {
                                                         // if fileID is dummy number, it is free to be assigned new ID
-                                                        if (packyList.get(i).fileID == 69) {
+                                                        if (packyList.get(i).fileID == 99) {
                                                                 packyList.get(i).setfileID(data.fileID);
                                                                 packyList.get(i).addToList(data);
                                                                 data.added = true;
                                                                 if ((data.statusID % 4) == 3) {
                                                                         // found last packet, update file max
-                                                                        packyList.get(i).setMaxSize(data.pnum);
+                                                                        packyList.get(i).setMaxSize(data.pnum);                                                                        
                                                                 }
                                                                 if (packyList.get(i).full == true) {
                                                                         // Recieved all packets for given file

@@ -1,10 +1,10 @@
 package segmentedfilesystem;
 
 import java.net.DatagramPacket;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class DataPack {
-    String status = "data";
     byte statusID;
     byte[] data;
     int pnum;
@@ -25,16 +25,21 @@ public class DataPack {
     }
 
     public void setPnum() {
-        int x = data[2];
-        int y = data[3];
-        if (x < 0) {
-            x += 256;
-        }
-        if (y < 0) {
-            y += 256;
-        }
+        // int x = data[2];
+        // int y = data[3];
+        // if (x < 0) {
+        //     x += 256;
+        // }
+        // if (y < 0) {
+        //     y += 256;
+        // }
+        // int x = Byte.toUnsignedInt(data[2]);
+        // int y = Byte.toUnsignedInt(data[3]);
+        // this.pnum = (256 * x + y);
+        byte[] pNumberData = new byte[]{data[2], data[3]};
+        this.pnum =  ByteBuffer.wrap(pNumberData).getShort();
+        
 
-        this.pnum = (256 * x + y);
     }
 
     public byte getFileID() {

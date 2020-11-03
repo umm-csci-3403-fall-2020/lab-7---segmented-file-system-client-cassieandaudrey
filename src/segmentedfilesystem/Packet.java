@@ -16,14 +16,15 @@ public class Packet {
     }
 
     public List<DataPack> sortPacks(Map<Integer, DataPack> datalist) {
-        // TreeMap to store values of HashMap
         List<Integer> sortedKeys = new ArrayList<Integer>(datalist.keySet());
         Collections.sort(sortedKeys);
         List<DataPack> sortedData = new ArrayList<DataPack>();
         for (Integer key : sortedKeys) {
             sortedData.add(datalist.get(key));
         }
-
+        for(int i =0; i<sortedData.size(); i++){
+            System.out.println(sortedData.get(i).pnum + "Packet Number");
+        }
         return sortedData;
     }
 
@@ -61,11 +62,11 @@ public class Packet {
 
     public void writeToFile(List<DataPack> sorted, String filename) throws IOException {
         File file = new File(filename);
-        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+        FileOutputStream out = new FileOutputStream(file);
+        //BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
         System.out.println("THE SIZE OF THE SORTED IS: " + sorted.size());
         for (int i = 0; i < sorted.size(); i++) {
             out.write(sorted.get(i).info);
-            System.out.println(sorted.get(i).pnum);
             
         }
         out.flush();
