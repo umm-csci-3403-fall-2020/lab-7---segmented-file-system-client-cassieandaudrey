@@ -20,7 +20,6 @@ public class PacketManager {
 
     public void addToList(DataPack dpack) {
         datalist.add(dpack);
-        System.out.println(datalist.size() + " " + this.MaxSize + " " +this.fileID );
         if (datalist.size() > this.MaxSize|| (dpack.statusID%4 == 3 && dpack.pnum ==0)) {
             this.full = true;
         }

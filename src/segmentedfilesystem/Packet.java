@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Packet {
+    boolean used =false; 
     public Packet() {
 
     }
@@ -64,7 +65,6 @@ public class Packet {
         File file = new File(filename);
         FileOutputStream out = new FileOutputStream(file);
         //BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
-        System.out.println("THE SIZE OF THE SORTED IS: " + sorted.size());
         for (int i = 0; i < sorted.size(); i++) {
             out.write(sorted.get(i).info);
             
